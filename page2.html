@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>الأقسام - متجر الورد الفاخر</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
+        :root {
+            --primary-color: #6d597a;
+            --accent-color: #b56576;
+            --bg-gradient: linear-gradient(-45deg, #f8f9ff, #e2d1f9, #add8e6, #fbc2eb);
+        }
+
+        /* منع التحديد الأزرق تماماً عند النقر */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; 
+            margin: 0;
+            padding: 0;
+            outline: none !important; 
+            user-select: none; 
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: meshGradient 12s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            transition: opacity 0.5s;
+            /* التعديل هنا لضمان توزيع المسافات الآمنة (safe-area) للأجهزة الحديثة */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        @keyframes meshGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 20px;
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        /* زر اللغة الثابت */
+        .lang-switch-btn {
+            position: fixed; top: 25px; right: 25px; z-index: 1001;
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px);
+            border: 2px solid #fff; padding: 10px 18px; border-radius: 20px;
+            font-weight: 900; color: #4a4e69; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        /* زر السلة الاحترافي */
+        .cart-wrapper {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 1000;
+        }
+
+        .cart-btn {
+            background: rgba(255, 255, 255, 0.9);
+            width: 65px;
+            height: 65px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart-btn:hover { transform: translateY(-5px) rotate(-10deg); }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e63946;
+            color: white;
+            font-size: 13px;
+            font-weight: 900;
+            min-width: 25px;
+            height: 25px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .header-section {
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        #welcome-msg {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 18px;
+            background: rgba(255,255,255,0.4);
+            padding: 5px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #353535;
+            font-size: 32px;
+            font-weight: 900;
+        }
+
+        .categories-grid {
+            display: grid;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            border-radius: 35px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            border: 2px solid rgba(255,255,255,0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            transition: all 0.5s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s forwards;
+        }
+
+        .category-card:nth-child(1) { animation-delay: 0.2s; }
+        .category-card:nth-child(2) { animation-delay: 0.4s; }
+        .category-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .category-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: white;
+            box-shadow: 0 30px 60px rgba(109, 89, 122, 0.15);
+        }
+
+        .content-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* تعديلات الاتجاه للمحتوى */
+        html[dir="rtl"] .text-group { text-align: right; }
+        html[dir="ltr"] .text-group { text-align: left; }
+
+        .icon-box {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .cat-title {
+            display: block;
+            font-size: 22px;
+            font-weight: 800;
+            color: #4a4a4a;
+        }
+
+        .cat-subtitle {
+            font-size: 13px;
+            color: #888;
+            font-weight: 600;
+        }
+
+        .arrow-box {
+            width: 45px;
+            height: 45px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            transition: 0.3s;
+        }
+
+        /* سهم الاتجاه حسب اللغة */
+        html[dir="rtl"] .category-card:hover .arrow-box { transform: translateX(-5px); }
+        html[dir="ltr"] .category-card:hover .arrow-box { transform: translateX(5px); }
+        
+        .category-card:hover .arrow-box {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .footer-nav {
+            margin-top: 50px;
+        }
+
+        .btn-return {
+            background: none;
+            border: 2px dashed var(--primary-color);
+            padding: 15px 40px;
+            border-radius: 50px;
+            color: var(--primary-color);
+            font-family: 'Cairo';
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-return:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="lang-switch-btn" onclick="toggleLanguage()" id="langBtn">EN</div>
+
+    <div class="cart-wrapper">
+        <div class="cart-btn" onclick="location.href='page6.html'">
+            🛒
+            <div class="cart-badge" id="cartCount">0</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header-section">
+            <span id="welcome-msg">اهلا وسهلا 🤍💜</span>
+            <h1 id="mainTitle">ماذا نجهز لك اليوم؟</h1>
+        </div>
+
+        <div class="categories-grid">
+            <div class="category-card" onclick="navigateTo('page3.html')">
+                <div class="content-group">
+                    <div class="icon-box">🌸</div>
+                    <div class="text-group">
+                        <span class="cat-title" id="cat1-title">تنسيق الورد</span>
+                        <span class="cat-subtitle" id="cat1-sub">صناعي، وتغليف هدايا</span>
+                    </div>
+                </div>
+                <div class="arrow-box" id="arrow1">←</div>
+            </div>
+
+            <div class="category-card" onclick="navigateTo('page4.html')">
+                <div class="content-group">
+                    <div class="icon-box">🪡</div>
+                    <div class="text-group">
+                        <span class="cat-title" id="cat2-title">فن التطريز</span>
+                        <span class="cat-subtitle" id="cat2-sub">طارات، وهدايا خاصة</span>
+                    </div>
+                </div>
+                <div class="arrow-box" id="arrow2">←</div>
+            </div>
+
+            <div class="category-card" onclick="navigateTo('page5.html')">
+                <div class="content-group">
+                    <div class="icon-box">✨</div>
+                    <div class="text-group">
+                        <span class="cat-title" id="cat3-title">الستيكرات</span>
+                        <span class="cat-subtitle" id="cat3-sub">تصاميم لاصقة حسب الطلب</span>
+                    </div>
+                </div>
+                <div class="arrow-box" id="arrow3">←</div>
+            </div>
+        </div>
+
+        <div class="footer-nav">
+            <button class="btn-return" onclick="goBack()" id="backBtn">الرجوع للرئيسية</button>
+        </div>
+    </div>
+
+    <script>
+        // دالة لجلب الاسم الأول من التخزين
+        function getFirstName() {
+            const fullName = sessionStorage.getItem('customer_name') || "";
+            return fullName.split(' ')[0]; // يأخذ أول كلمة من الاسم
+        }
+
+        const translations = {
+            ar: {
+                lang: "EN",
+                welcome: "اهلا وسهلا " + (getFirstName() || "") + " 🤍💜",
+                mainTitle: "ماذا نجهز لك اليوم؟",
+                cat1T: "تنسيق الورد",
+                cat1S: "صناعي، وتغليف هدايا",
+                cat2T: "فن التطريز",
+                cat2S: "طارات، وهدايا خاصة",
+                cat3T: "الستيكرات",
+                cat3S: "تصاميم لاصقة حسب الطلب",
+                back: "الرجوع للرئيسية",
+                arrow: "←"
+            },
+            en: {
+                lang: "AR",
+                welcome: "Welcome " + (getFirstName() || "") + " 🤍💜",
+                mainTitle: "What can we prepare for you?",
+                cat1T: "Flower Arrangement",
+                cat1S: "Artificial & Gift Wrapping",
+                cat2T: "Embroidery Art",
+                cat2S: "Hoops & Special Gifts",
+                cat3T: "Stickers",
+                cat3S: "Custom Adhesive Designs",
+                back: "Back to Home",
+                arrow: "→"
+            }
+        };
+
+        function toggleLanguage() {
+            const html = document.documentElement;
+            const isAr = html.getAttribute('dir') === 'rtl';
+            const newLang = isAr ? 'en' : 'ar';
+            const t = translations[newLang];
+
+            html.setAttribute('dir', isAr ? 'ltr' : 'rtl');
+            html.setAttribute('lang', newLang);
+
+            document.getElementById('langBtn').innerText = t.lang;
+            document.getElementById('welcome-msg').innerText = t.welcome;
+            document.getElementById('mainTitle').innerText = t.mainTitle;
+            document.getElementById('cat1-title').innerText = t.cat1T;
+            document.getElementById('cat1-sub').innerText = t.cat1S;
+            document.getElementById('cat2-title').innerText = t.cat2T;
+            document.getElementById('cat2-sub').innerText = t.cat2S;
+            document.getElementById('cat3-title').innerText = t.cat3T;
+            document.getElementById('cat3-sub').innerText = t.cat3S;
+            document.getElementById('backBtn').innerText = t.back;
+            
+            // تحديث اتجاه الأسهم
+            document.getElementById('arrow1').innerText = t.arrow;
+            document.getElementById('arrow2').innerText = t.arrow;
+            document.getElementById('arrow3').innerText = t.arrow;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshCart();
+            // تحديث رسالة الترحيب عند تحميل الصفحة بالاسم الأول
+            const isEn = document.documentElement.lang === 'en';
+            document.getElementById('welcome-msg').innerText = isEn ? translations.en.welcome : translations.ar.welcome;
+        });
+
+        function refreshCart() {
+            let totalItems = 0;
+            const keys = ['flower_order', 'embroidery_order', 'sticker_order'];
+            keys.forEach(key => {
+                const data = sessionStorage.getItem(key);
+                if(data) totalItems++;
+            });
+            document.getElementById('cartCount').innerText = totalItems;
+        }
+
+        function navigateTo(url) {
+            document.body.style.opacity = '0.7';
+            setTimeout(() => { window.location.href = url; }, 100);
+        }
+
+        function goBack() {
+            window.location.href = 'page1.html';
+        }
+    </script>
+</body>
+</html>
