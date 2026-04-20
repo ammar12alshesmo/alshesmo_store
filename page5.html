@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VB8CHYBNCN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VB8CHYBNCN');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>قسم الستيكرات - الشسمو</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;900&display=swap');
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none !important; user-select: none; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0; padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom) 10px;
+            background: linear-gradient(-45deg, #fbc2eb, #a6c1ee, #fddb92);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex; justify-content: center;
+        }
+
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .mobile-container { width: 100%; max-width: 450px; text-align: center; }
+
+        .glass-box {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 30px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-top: 40px;
+        }
+
+        h2 { color: #4a4e69; font-weight: 900; margin: 0 0 10px 0; font-size: 24px; }
+        .price-info { color: #6d597a; font-weight: 800; font-size: 15px; margin-bottom: 25px; display: block; }
+
+        .step-content { display: none; animation: fadeIn 0.4s ease-out; }
+        .step-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .stickers-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
+            margin-bottom: 30px; max-height: 50vh; overflow-y: auto; 
+            padding: 15px 5px; border-radius: 20px; background: rgba(0,0,0,0.02);
+        }
+
+        .sticker-card {
+            background: white; border-radius: 25px; padding: 15px; 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.04); display: flex;
+            flex-direction: column; align-items: center; border: 2px solid transparent;
+            transition: 0.3s;
+        }
+
+        .sticker-card img { width: 100%; height: 90px; object-fit: contain; margin-bottom: 10px; }
+
+        .sticker-label { font-size: 13px; font-weight: 800; color: #4a4e69; margin-bottom: 10px; }
+
+        .counter-box {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #f1f3f5; border-radius: 50px; padding: 4px; width: 100%;
+        }
+
+        .btn-c {
+            width: 30px; height: 30px; border-radius: 50%; border: none;
+            background: white; color: #4a4e69; font-size: 18px; font-weight: 900;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .count-val { font-weight: 900; color: #6d597a; font-size: 16px; }
+
+        .invoice-card { background: #fdfaff; padding: 20px; border-radius: 25px; border: 1px solid #eee; text-align: right; }
+        .inv-line { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; font-weight: 700; color: #4a4e69; }
+        .inv-total { border-top: 2px dashed #6d597a; margin-top: 15px; padding-top: 15px; font-size: 20px; color: #6d597a; text-align: center; font-weight: 900; }
+
+        .btn-group { display: flex; gap: 12px; margin-top: 25px; }
+        .btn { flex: 1; height: 60px; border-radius: 20px; font-family: 'Cairo'; font-weight: 900; cursor: pointer; border: none; transition: 0.3s; }
+        .btn-next { background: #6d597a; color: white; }
+        .btn-back { background: white; color: #6d597a; border: 2px solid #6d597a; }
+
+        #proModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10001; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-box { background: white; padding: 25px; border-radius: 30px; text-align: center; width: 85%; max-width: 320px; animation: pop 0.3s; }
+        @keyframes pop { from { transform: scale(0.8); } to { transform: scale(1); } }
+        .modal-btn { background: #6d597a; color: white; border: none; width: 100%; padding: 12px; border-radius: 15px; font-family: 'Cairo'; font-weight: 900; margin-top: 15px; }
+
+        .falling-item { position: fixed; top: -50px; z-index: 9999; pointer-events: none; animation: fall linear forwards; font-size: 24px; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+
+        .stickers-grid::-webkit-scrollbar { width: 4px; }
+        .stickers-grid::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container">
+    <div class="glass-box">
+        
+        <div id="step1" class="step-content active">
+            <h2>قسم الستيكرات ✨</h2>
+            <span class="price-info">أي ستيكر بـ 0.75 دينار فقط</span>
+            
+            <div class="stickers-grid" id="stickersGrid"></div>
+
+            <div class="btn-group">
+                <button class="btn btn-back" onclick="window.location.href='page2.html'">عودة</button>
+                <button class="btn btn-next" onclick="validateStep1()">عرض الفاتورة</button>
+            </div>
+        </div>
+
+        <div id="step2" class="step-content">
+            <h2>ملخص طلبك 🧾</h2>
+            <div id="invoiceContent" class="invoice-card"></div>
+            
+            <div class="btn-group">
+                <button class="btn btn-back" onclick="goToStep(1)">تعديل</button>
+                <button class="btn btn-next" onclick="confirmAndStore()">تأكيد وإضافة للسلة 🛒</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="proModal">
+    <div class="modal-box">
+        <h2 id="modalTitle" style="margin:0; color:#6d597a">تنبيه</h2>
+        <p id="modalMsg" style="margin-top:10px; font-weight:700; color:#4a4e69"></p>
+        <button class="modal-btn" onclick="closeModal()">حسناً</button>
+    </div>
+</div>
+
+<script>
+    let stickerCart = {};
+    const STICKER_PRICE = 0.75;
+
+    const grid = document.getElementById('stickersGrid');
+    for (let i = 1; i <= 60; i++) {
+        const id = 's' + i;
+        grid.innerHTML += `
+            <div class="sticker-card" id="card-${id}">
+                <img src="s${i}.png" onerror="this.src='https://via.placeholder.com/100/f8f9fa/6d597a?text=S${i}'">
+                <div class="sticker-label">ستيكر #${i}</div>
+                <div class="counter-box">
+                    <button class="btn-c" onclick="updateCount('${id}', -1)">-</button>
+                    <span class="count-val" id="count-${id}">0</span>
+                    <button class="btn-c" onclick="updateCount('${id}', 1)">+</button>
+                </div>
+            </div>
+        `;
+    }
+
+    function updateCount(id, change) {
+        if (!stickerCart[id]) stickerCart[id] = 0;
+        stickerCart[id] += change;
+        if (stickerCart[id] < 0) stickerCart[id] = 0;
+        
+        document.getElementById('count-' + id).innerText = stickerCart[id];
+    }
+
+    function goToStep(s) {
+        document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+        document.getElementById('step'+s).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function validateStep1() {
+        let totalQty = Object.values(stickerCart).reduce((a, b) => a + b, 0);
+        if (totalQty === 0) return showAlert("تنبيه", "يرجى اختيار ستيكر واحد على الأقل 🌸");
+        
+        showInvoice();
+        goToStep(2);
+    }
+
+    function showInvoice() {
+        let total = 0;
+        let html = "";
+        let detailsLines = [];
+        
+        for (let id in stickerCart) {
+            if (stickerCart[id] > 0) {
+                let num = id.replace('s','');
+                let subtotal = stickerCart[id] * STICKER_PRICE;
+                html += `
+                    <div class="inv-line">
+                        <span>ستيكر #${num} (×${stickerCart[id]})</span>
+                        <span>${subtotal.toFixed(2)} د.أ</span>
+                    </div>`;
+                // تخزين الأصناف بأسطر منفصلة لاستخدامها في السلة
+                detailsLines.push(`- ستيكر #${num}: (×${stickerCart[id]})`);
+                total += subtotal;
+            }
+        }
+
+        html += `<div class="inv-total">المجموع: ${total.toFixed(2)} JOD</div>`;
+        
+        // حفظ النص المنظم بأسطر \n لرسالة السلة
+        window.stickerDetailsText = "تفاصيل الستيكرات:\n" + detailsLines.join('\n');
+        
+        document.getElementById('invoiceContent').innerHTML = html;
+    }
+
+    function confirmAndStore() {
+        let totalQty = Object.values(stickerCart).reduce((a, b) => a + b, 0);
+        let totalPrice = totalQty * STICKER_PRICE;
+
+        let cartItem = {
+            id: 'sticker_' + Date.now(),
+            name: "🎨 مجموعة ستيكرات مخصصة",
+            price: parseFloat(totalPrice),
+            quantity: totalQty,
+            details: window.stickerDetailsText,
+            image: 'sticker-icon.png'
+        };
+
+        let localCart = JSON.parse(localStorage.getItem('cart')) || [];
+        localCart.push(cartItem);
+        localStorage.setItem('cart', JSON.stringify(localCart));
+
+        createFallingStickers();
+        
+        setTimeout(() => {
+            showAlert("تمت الإضافة! ✅", "تمت إضافة الستيكرات لسلة التسوق بنجاح.", "🛒", () => {
+                window.location.href = 'page2.html';
+            });
+        }, 500);
+    }
+
+    function createFallingStickers() {
+        const emojis = ['✨', '🎨', '🖼️', '⭐'];
+        for (let i = 0; i < 40; i++) {
+            setTimeout(() => {
+                const div = document.createElement('div');
+                div.className = 'falling-item';
+                div.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                div.style.left = Math.random() * 100 + 'vw';
+                div.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(div);
+                setTimeout(() => div.remove(), 3000);
+            }, i * 80);
+        }
+    }
+
+    function showAlert(title, msg, icon = "⚠️", cb = null) {
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalMsg').innerText = msg;
+        document.getElementById('proModal').style.display = 'flex';
+        window.modalCallback = cb;
+    }
+
+    function closeModal() {
+        document.getElementById('proModal').style.display = 'none';
+        if (window.modalCallback) window.modalCallback();
+    }
+</script>
+
+</body>
+</html>
